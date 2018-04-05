@@ -1,4 +1,4 @@
-### http-launcher
+### ⚡ http-launcher
 ##### 简介
 这是一个简单的Http请求发送的小的封装库,采用流式API风格来发起Http请求，支持以字符串形式和指定对象的形式来获Http响应。
 
