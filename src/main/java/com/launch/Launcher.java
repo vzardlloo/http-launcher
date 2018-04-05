@@ -9,13 +9,15 @@ public abstract class Launcher {
 
     public static class bulider{
 
-         private String httpMethod;
+        private String httpMethod;
 
-         private String url;
+        private String url;
 
-         private Map<String,String> params;
+        private Map<String, String> params;
 
-         private String charSet;
+        private String charSet;
+
+        private Class type;
 
 
         public bulider setHttpMethod(String httpMethod) {
@@ -47,6 +49,17 @@ public abstract class Launcher {
             }
             return null;
         }
+
+        public <T> T jsonObject(Class<T> type) {
+            if (httpMethod.equalsIgnoreCase(HttpMethod.GET)) {
+                return HttpTemplate.getReObj(type, this.url, this.params, this.charSet);
+            }
+            if (httpMethod.equalsIgnoreCase(HttpMethod.POST)) {
+                return HttpTemplate.postReObj(type, this.url, this.params, this.charSet);
+            }
+            return null;
+        }
+
     }
 
     public static bulider bulider(){
