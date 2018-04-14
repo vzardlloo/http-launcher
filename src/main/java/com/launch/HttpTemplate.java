@@ -10,9 +10,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -40,28 +38,8 @@ public class HttpTemplate {
 
 
     public static String doGet(String url, Map<String, String> param, String charset) {
-        if (!StringKit.isNotBlank(url)) {
-            return null;
-        }
-        if (null == charset) {
-            charset = DEFAULT_CHARSET;
-        }
         try {
-            List<NameValuePair> pairList = null;
-            if (param != null && !param.isEmpty()) {
-                pairList = new ArrayList<NameValuePair>(param.size());
-                for (Map.Entry<String, String> entry : param.entrySet()) {
-                    String value = entry.getValue();
-                    if (value != null) {
-                        pairList.add(new BasicNameValuePair(entry.getKey(), value));
-                    }
-                }
-            }
-            if (pairList != null) {
-                url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairList, charset));
-            }
-            HttpGet httpGet = new HttpGet(url);
-
+            HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (!String.valueOf(statusCode).startsWith("2")) {
@@ -83,27 +61,8 @@ public class HttpTemplate {
     }
 
     public static String doPost(String url, Map<String, String> params, String charset) {
-        if (!StringKit.isNotBlank(url)) {
-            return null;
-        }
-        if (null == charset) {
-            charset = DEFAULT_CHARSET;
-        }
         try {
-            List<NameValuePair> pairs = null;
-            if (params != null && !params.isEmpty()) {
-                pairs = new ArrayList<NameValuePair>(pairs.size());
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    String value = entry.getValue();
-                    if (value != null) {
-                        pairs.add(new BasicNameValuePair(entry.getKey(), value));
-                    }
-                }
-            }
-            HttpPost httpPost = new HttpPost(url);
-            if (pairs != null && !pairs.isEmpty()) {
-                httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-            }
+            HttpPost httpPost = (HttpPost) initRequestParam("Post", url, params, charset);
             HttpResponse response = httpClient.execute(httpPost);
             int status = response.getStatusLine().getStatusCode();
             if (!String.valueOf(status).startsWith("2")) {
@@ -127,28 +86,8 @@ public class HttpTemplate {
 
 
     public static <T> T getReObj(Class<T> type, String url, Map<String, String> param, String charset) {
-        if (!StringKit.isNotBlank(url)) {
-            return null;
-        }
-        if (null == charset) {
-            charset = DEFAULT_CHARSET;
-        }
         try {
-            List<NameValuePair> pairList = null;
-            if (param != null && !param.isEmpty()) {
-                pairList = new ArrayList<NameValuePair>(param.size());
-                for (Map.Entry<String, String> entry : param.entrySet()) {
-                    String value = entry.getValue();
-                    if (value != null) {
-                        pairList.add(new BasicNameValuePair(entry.getKey(), value));
-                    }
-                }
-            }
-            if (pairList != null) {
-                url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairList, charset));
-            }
-            logger.info(url);
-            HttpGet httpGet = new HttpGet(url);
+            HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
             CloseableHttpResponse response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (!String.valueOf(statusCode).startsWith("2")) {
@@ -173,27 +112,8 @@ public class HttpTemplate {
 
 
     public static <T> T postReObj(Class<T> type, String url, Map<String, String> params, String charset) {
-        if (!StringKit.isNotBlank(url)) {
-            return null;
-        }
-        if (null == charset) {
-            charset = DEFAULT_CHARSET;
-        }
         try {
-            List<NameValuePair> pairs = null;
-            if (params != null && !params.isEmpty()) {
-                pairs = new ArrayList<NameValuePair>(pairs.size());
-                for (Map.Entry<String, String> entry : params.entrySet()) {
-                    String value = entry.getValue();
-                    if (value != null) {
-                        pairs.add(new BasicNameValuePair(entry.getKey(), value));
-                    }
-                }
-            }
-            HttpPost httpPost = new HttpPost(url);
-            if (pairs != null && !pairs.isEmpty()) {
-                httpPost.setEntity(new UrlEncodedFormEntity(pairs));
-            }
+            HttpPost httpPost = (HttpPost) initRequestParam("Post", url, params, charset);
             HttpResponse response = httpClient.execute(httpPost);
             int status = response.getStatusLine().getStatusCode();
             if (!String.valueOf(status).startsWith("2")) {
@@ -216,5 +136,72 @@ public class HttpTemplate {
         return null;
     }
 
+    public static HttpResponse getReResponse(String url, Map<String, String> param, String charset) {
+        try {
+            HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
+            return httpClient.execute(httpGet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static HttpResponse postReResponse(String url, Map<String, String> param, String charset) {
+        try {
+            HttpPost httpPost = (HttpPost) initRequestParam("Post", url, param, charset);
+            return httpClient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static HttpRequestBase initRequestParam(String methodName, String url, Map<String, String> params, String charset) {
+        if (!StringKit.isNotBlank(url)) {
+            return null;
+        }
+        if (null == charset) {
+            charset = DEFAULT_CHARSET;
+        }
+        List<NameValuePair> pairList = null;
+        if (params != null && !params.isEmpty()) {
+            pairList = new ArrayList<NameValuePair>(params.size());
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                String value = entry.getValue();
+                if (value != null) {
+                    pairList.add(new BasicNameValuePair(entry.getKey(), value));
+                }
+            }
+        }
+
+        if ("Get".equalsIgnoreCase(methodName)) {
+            try {
+
+                if (pairList != null) {
+                    url += "?" + EntityUtils.toString(new UrlEncodedFormEntity(pairList, charset));
+                }
+                logger.info(url);
+                HttpGet httpGet = new HttpGet(url);
+                return httpGet;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else if ("Post".equalsIgnoreCase(methodName)) {
+            try {
+                HttpPost httpPost = new HttpPost(url);
+                if (pairList != null && !pairList.isEmpty()) {
+                    httpPost.setEntity(new UrlEncodedFormEntity(pairList));
+                }
+                return httpPost;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return null;
+    }
 
 }

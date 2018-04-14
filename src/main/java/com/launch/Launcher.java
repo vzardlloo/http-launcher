@@ -1,6 +1,8 @@
 package com.launch;
 
 
+import org.apache.http.HttpResponse;
+
 import java.util.Map;
 
 public abstract class Launcher {
@@ -56,6 +58,16 @@ public abstract class Launcher {
             }
             if (httpMethod.equalsIgnoreCase(HttpMethod.POST)) {
                 return HttpTemplate.postReObj(type, this.url, this.params, this.charSet);
+            }
+            return null;
+        }
+
+        public HttpResponse fullResponse() {
+            if (httpMethod.equalsIgnoreCase(HttpMethod.GET)) {
+                return HttpTemplate.getReResponse(this.url, this.params, this.charSet);
+            }
+            if (httpMethod.equalsIgnoreCase(HttpMethod.POST)) {
+                return HttpTemplate.postReResponse(this.url, this.params, this.charSet);
             }
             return null;
         }
