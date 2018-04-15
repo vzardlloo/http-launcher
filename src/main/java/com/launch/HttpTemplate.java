@@ -158,6 +158,7 @@ public class HttpTemplate {
     }
 
     private static HttpRequestBase initRequestParam(String methodName, String url, Map<String, String> params, String charset) {
+        logger.info(url);
         if (!StringKit.isNotBlank(url)) {
             return null;
         }

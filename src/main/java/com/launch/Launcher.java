@@ -8,7 +8,6 @@ import java.util.Map;
 public abstract class Launcher {
 
 
-
     public static class bulider{
 
         private String httpMethod;
@@ -42,7 +41,8 @@ public abstract class Launcher {
             return this;
         }
 
-        public  String bulid(){
+
+        public String data() {
             if (httpMethod.equalsIgnoreCase(HttpMethod.GET)){
                 return HttpTemplate.doGet(this.url,this.params,this.charSet);
             }
