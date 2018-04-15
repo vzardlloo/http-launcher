@@ -8,7 +8,7 @@ import java.util.Map;
 public abstract class Launcher {
 
 
-    public static class bulider{
+    public static class builder {
 
         private String httpMethod;
 
@@ -21,22 +21,22 @@ public abstract class Launcher {
         private Class type;
 
 
-        public bulider setHttpMethod(String httpMethod) {
+        public builder setHttpMethod(String httpMethod) {
             this.httpMethod = httpMethod;
             return this;
         }
 
-        public bulider setUrl(String url) {
+        public builder setUrl(String url) {
             this.url = url;
             return this;
         }
 
-        public bulider setParams(Map<String, String> params) {
+        public builder setParams(Map<String, String> params) {
             this.params = params;
             return this;
         }
 
-        public bulider setCharSet(String charSet) {
+        public builder setCharSet(String charSet) {
             this.charSet = charSet;
             return this;
         }
@@ -74,8 +74,8 @@ public abstract class Launcher {
 
     }
 
-    public static bulider bulider(){
-        return new bulider();
+    public static builder bulider() {
+        return new builder();
     }
 
 

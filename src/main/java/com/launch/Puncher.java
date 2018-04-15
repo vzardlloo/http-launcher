@@ -2,7 +2,6 @@ package com.launch;
 
 
 import org.apache.http.HttpResponse;
-
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -88,7 +87,6 @@ public class Puncher extends Launcher {
                     .url(getUrl())
                     .build();
             for (int i = 0; i < times; i++) {
-                System.out.println(i);
                 HttpResponse httpResponse = HttpService.sendRequest(httpParams);
                 resultList.add(httpResponse);
             }

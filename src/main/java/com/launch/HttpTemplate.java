@@ -4,6 +4,8 @@ package com.launch;
 import com.alibaba.fastjson.JSON;
 
 import com.launch.kit.StringKit;
+import com.sun.deploy.util.SessionState;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -19,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +41,10 @@ public class HttpTemplate {
 
 
     public static String doGet(String url, Map<String, String> param, String charset) {
+        CloseableHttpResponse response = null;
         try {
             HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
-            CloseableHttpResponse response = httpClient.execute(httpGet);
+            response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (!String.valueOf(statusCode).startsWith("2")) {
                 throw new RuntimeException("Http Template Error :: status code " + statusCode);
@@ -56,14 +60,21 @@ public class HttpTemplate {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
     public static String doPost(String url, Map<String, String> params, String charset) {
+        CloseableHttpResponse response = null;
         try {
             HttpPost httpPost = (HttpPost) initRequestParam("Post", url, params, charset);
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             int status = response.getStatusLine().getStatusCode();
             if (!String.valueOf(status).startsWith("2")) {
                 throw new RuntimeException("Http Template Error :: status error " + status);
@@ -78,6 +89,12 @@ public class HttpTemplate {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -86,9 +103,10 @@ public class HttpTemplate {
 
 
     public static <T> T getReObj(Class<T> type, String url, Map<String, String> param, String charset) {
+        CloseableHttpResponse response = null;
         try {
             HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
-            CloseableHttpResponse response = httpClient.execute(httpGet);
+            response = httpClient.execute(httpGet);
             int statusCode = response.getStatusLine().getStatusCode();
             if (!String.valueOf(statusCode).startsWith("2")) {
                 throw new RuntimeException("Http Template Error :: status code " + statusCode);
@@ -106,15 +124,22 @@ public class HttpTemplate {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
 
     public static <T> T postReObj(Class<T> type, String url, Map<String, String> params, String charset) {
+        CloseableHttpResponse response = null;
         try {
             HttpPost httpPost = (HttpPost) initRequestParam("Post", url, params, charset);
-            HttpResponse response = httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
             int status = response.getStatusLine().getStatusCode();
             if (!String.valueOf(status).startsWith("2")) {
                 throw new RuntimeException("Http Template Error :: status error " + status);
@@ -131,28 +156,50 @@ public class HttpTemplate {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         return null;
     }
 
     public static HttpResponse getReResponse(String url, Map<String, String> param, String charset) {
+        CloseableHttpResponse httpResponse = null;
         try {
             HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
-            return httpClient.execute(httpGet);
+            httpResponse = httpClient.execute(httpGet);
+            return httpResponse;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                httpResponse.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
 
 
     public static HttpResponse postReResponse(String url, Map<String, String> param, String charset) {
+        CloseableHttpResponse httpResponse = null;
         try {
             HttpPost httpPost = (HttpPost) initRequestParam("Post", url, param, charset);
-            return httpClient.execute(httpPost);
+            httpResponse = httpClient.execute(httpPost);
+            return httpResponse;
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                httpResponse.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
