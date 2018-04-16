@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class Puncher extends Launcher {
+public abstract class Puncher{
 
     static volatile ArrayList<HttpResponse> resultList = new ArrayList<HttpResponse>();
 

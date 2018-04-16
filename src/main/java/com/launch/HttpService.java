@@ -13,7 +13,7 @@ public class HttpService {
                 .setHttpMethod(params.getMethod())
                 .setCharSet(params.getCharSet())
                 .setParams(params.getParams())
-                .fullResponse();
+                .response();
     }
 
 

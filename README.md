@@ -13,7 +13,7 @@ String result = Launcher.bulider()
                 .setHttpMethod("GET") //指定Http方法
                 .setUrl("http://www.baidu.com") //指定url
                 .setParams(param) //指定请求参数
-                .bulid();
+                .data();
 ```
 返回对象
 ```java
@@ -22,5 +22,25 @@ String result = Launcher.bulider()
                 .setHttpMethod("GET") //指定Http方法
                 .setUrl("http://www.baidu.com") //指定url
                 .setParams(param) //指定请求参数
-                .jsonObject(YourObject.class);
+                .object(YourObject.class);
+```
+返回整个httpResponse
+```java
+HttpResponse result = Launcher.bulider()
+                    .setCharSet("utf-8")  //指定字符编码，默认是utf-8
+                    .setHttpMethod("GET") //指定Http方法
+                    .setUrl("http://www.baidu.com") //指定url
+                    .response();
+
+```
+
+批量发送http请求
+```java
+String result1 = Puncher.newer()
+                .setCharSet("utf-8")
+                .setHttpMethod("GET")
+                .setUrl("http://www.baidu.com")
+                .setTimes(10)
+                .feedback();
+
 ```

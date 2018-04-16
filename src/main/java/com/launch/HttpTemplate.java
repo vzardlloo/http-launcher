@@ -102,7 +102,7 @@ public class HttpTemplate {
     }
 
 
-    public static <T> T getReObj(Class<T> type, String url, Map<String, String> param, String charset) {
+    public static <T> T doGet(Class<T> type, String url, Map<String, String> param, String charset) {
         CloseableHttpResponse response = null;
         try {
             HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
@@ -135,7 +135,7 @@ public class HttpTemplate {
     }
 
 
-    public static <T> T postReObj(Class<T> type, String url, Map<String, String> params, String charset) {
+    public static <T> T doPost(Class<T> type, String url, Map<String, String> params, String charset) {
         CloseableHttpResponse response = null;
         try {
             HttpPost httpPost = (HttpPost) initRequestParam("Post", url, params, charset);
@@ -167,7 +167,7 @@ public class HttpTemplate {
         return null;
     }
 
-    public static HttpResponse getReResponse(String url, Map<String, String> param, String charset) {
+    public static HttpResponse getResponse(String url, Map<String, String> param, String charset) {
         CloseableHttpResponse httpResponse = null;
         try {
             HttpGet httpGet = (HttpGet) initRequestParam("Get", url, param, charset);
@@ -186,7 +186,7 @@ public class HttpTemplate {
     }
 
 
-    public static HttpResponse postReResponse(String url, Map<String, String> param, String charset) {
+    public static HttpResponse postResponse(String url, Map<String, String> param, String charset) {
         CloseableHttpResponse httpResponse = null;
         try {
             HttpPost httpPost = (HttpPost) initRequestParam("Post", url, param, charset);
